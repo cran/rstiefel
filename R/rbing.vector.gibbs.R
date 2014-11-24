@@ -3,7 +3,7 @@ function(A,x)
 {
   #simulate from the vector bmf distribution as described in Hoff(2009) 
   #this is one Gibbs step, and must be used iteratively
-  evdA<-eigen(A)
+  evdA<-eigen(A,symmetric=TRUE)
   E<-evdA$vec
   l<-evdA$val
 

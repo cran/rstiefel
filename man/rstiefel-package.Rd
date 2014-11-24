@@ -12,8 +12,8 @@ This package simulates random orthonormal matrices from linear and quadratic exp
 \tabular{ll}{
 Package: \tab rstiefel\cr
 Type: \tab Package\cr
-Version: \tab 0.9\cr
-Date: \tab 2012-01-02\cr
+Version: \tab 0.10\cr
+Date: \tab 2014-11-24\cr
 License: \tab GPL-3\cr
 }
 

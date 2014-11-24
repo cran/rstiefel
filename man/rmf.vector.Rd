@@ -33,7 +33,7 @@ function (kmu)
     m <- length(mu)
     if (kap == 0) {
         u <- rnorm(length(kmu))
-        u <- u/sqrt(sum(u^2))
+        u<-matrix(u/sqrt(sum(u^2)),m,1) 
     }
     if (kap > 0) {
         if (m == 1) {
