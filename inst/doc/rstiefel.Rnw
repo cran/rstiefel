@@ -1,5 +1,5 @@
 \documentclass[11pt]{article}
-\usepackage{natbib,amssymb,amsmath,fullpage,hyperref}
+\usepackage{natbib,amssymb,amsmath,hyperref}
 
 %\VignetteIndexEntry{Matrix modeling with rstiefel}
 
@@ -15,7 +15,7 @@
 
 \title{Bayesian analysis of matrix data with 
               {\bf rstiefel}} 
-\author{Peter D. Hoff \thanks{Departments of Statistics and Biostatistics, University of Washington, Seattle, WA 98195-4322. This research was supported in part by
+\author{Peter D. Hoff \thanks{Department of Statistical Science, Duke University. This research was supported in part by
 NI-CHD grant 1R01HD067509-01A1. } }
 \maketitle
 
@@ -555,7 +555,65 @@ legend(-.15,.3,col=c(3,3,2,2),pch=c(1,2,1,2),
 \label{fig:sna}
 \end{figure}
 
-\input{rstiefel.bbl}
+
+\begin{thebibliography}{7}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Bingham(1974)]{bingham_1974}
+Christopher Bingham.
+\newblock An antipodally symmetric distribution on the sphere.
+\newblock \emph{Ann. Statist.}, 2:\penalty0 1201--1225, 1974.
+\newblock ISSN 0090-5364.
+
+\bibitem[Chikuse(2003)]{chikuse_2003a}
+Yasuko Chikuse.
+\newblock \emph{Statistics on special manifolds}, volume 174 of \emph{Lecture
+  Notes in Statistics}.
+\newblock Springer-Verlag, New York, 2003.
+\newblock ISBN 0-387-00160-3.
+
+\bibitem[Hoff(2007)]{hoff_2007b}
+Peter~D. Hoff.
+\newblock Model averaging and dimension selection for the singular value
+  decomposition.
+\newblock \emph{J. Amer. Statist. Assoc.}, 102\penalty0 (478):\penalty0
+  674--685, 2007.
+\newblock ISSN 0162-1459.
+
+\bibitem[Hoff(2008)]{hoff_2008}
+Peter~D. Hoff.
+\newblock Modeling homophily and stochastic equivalence in symmetric relational
+  data.
+\newblock In J.C. Platt, D.~Koller, Y.~Singer, and S.~Roweis, editors,
+  \emph{Advances in Neural Information Processing Systems 20}, pages 657--664.
+  MIT Press, Cambridge, MA, 2008.
+\newblock URL \url{http://cran.r-project.org/web/packages/eigenmodel/}.
+
+\bibitem[Hoff(2009{\natexlab{a}})]{hoff_2009a}
+Peter~D. Hoff.
+\newblock Simulation of the matrix {B}ingham-von {M}ises-{F}isher distribution,
+  with applications to multivariate and relational data.
+\newblock \emph{Journal of Computational and Graphical Statistics}, 18\penalty0
+  (2):\penalty0 438--456, 2009{\natexlab{a}}.
+
+\bibitem[Hoff(2009{\natexlab{b}})]{hoff_2009b}
+Peter~D. Hoff.
+\newblock A hierarchical eigenmodel for pooled covariance estimation.
+\newblock \emph{J. R. Stat. Soc. Ser. B Stat. Methodol.}, 71\penalty0
+  (5):\penalty0 971--992, 2009{\natexlab{b}}.
+
+\bibitem[Michell and Amos(1997)]{michell_amos_1997}
+L.~Michell and A.~Amos.
+\newblock Girls, pecking order and smoking.
+\newblock \emph{Social Science \& Medicine}, 44\penalty0 (12):\penalty0
+  1861--1869, 1997.
+
+\end{thebibliography}
+
 
 \end{document}
 
