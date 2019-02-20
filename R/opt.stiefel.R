@@ -1,7 +1,7 @@
 #' @title Optimize a function on the Stiefel manifold
 #'
 #' @description
-#' Find a local optimum of a function defined on the stiefel manifold using algorithms described in Wen and Yin (2013).
+#' Find a local minimum of a function defined on the stiefel manifold using algorithms described in Wen and Yin (2013).
 #' @param F A function V(P, S) -> \code{R^1}
 #' @param dF A function to compute the gradient of F.  Returns a \code{P x S} matrix with \code{dF(X)_ij  = d(F(X))/dX_ij}
 #' @param Vinit The starting point on the stiefel manifold for the optimization
@@ -21,24 +21,22 @@
 #' ## has been raised to keep the runtime 
 #' ## of this example below the CRAN submission threshold. 
 #' 
-#' N <- 500
+#' N <- 1000
 #' P <- 3
-#' Lam <- diag(c(10, 5, 3, rep(1, N-P)))
+#' Lam <- c(10, 5, 3)
 #' U <- rustiefel(N, N)
-#' M <- U %*% Lam %*% t(U)
 #' 
-#' F <- function(V) { - sum(diag(t(V) %*% M %*% V)) }
-#' dF <- function(V) { - 2*M %*% V }
+#' F <- function(V) { - sum(diag( (t(V) %*% U) %*% diag(Lam) %*% (t(U) %*% V))) }
+#' dF <- function(V) { - 2 * (U %*% diag(Lam)) %*% (t(U) %*% V) + V }
 #' V = optStiefel(F, dF, Vinit=rustiefel(N, P),
-#'                method="curvilinear",
-#'                searchParams=list(rho1=0.1, rho2=0.9, tau=1),tol=1e-4)
+#'                method="bb", tol=1e-4)
 #'                
 #' print(sprintf("Sum of first %d eigenvalues is %f", P, -F(V)))
 #' 
 #' @export
 optStiefel <- function(F, dF, Vinit, method="bb",
                        searchParams=NULL,
-                       tol=1e-5,
+                       tol=1e-12,
                        maxIters=100, verbose=FALSE, 
                        maxLineSearchIters=20) {
 
@@ -101,7 +99,7 @@ optStiefel <- function(F, dF, Vinit, method="bb",
     Fprime <- Inf
 
     ## While ||gradF(V)|| > eps
-    while(abs(Fprime) > tol & iter < maxIters) {
+    while(abs(Fprime) > abs(Fcur)*tol & iter < maxIters) {
         
         Fprev <- Fcur
         if ( method == "bb") {
@@ -135,8 +133,8 @@ optStiefel <- function(F, dF, Vinit, method="bb",
         }
 
         ## compute ||gradF(V)||
-        A <- Gcur %*% t(V) - V %*% t(Gcur)
-        Fprime <- tr( t(Gcur) %*% -A %*% V )
+        tGV <- t(Gcur) %*% V
+        Fprime <- -sum(diag((t(Gcur) %*% Gcur) %*% (t(V) %*% V) - tGV %*% tGV))
         
         iter <- iter + 1
     }
@@ -274,12 +272,11 @@ lineSearchBB <- function(F, X, Xprev, G_x, G_xprev, rho, C, maxIters=20) {
     n <- nrow(X)
     p <- ncol(X)
 
-    A <- G_x %*% t(X) - X %*% t(G_x)
     U <- cbind(G_x, X)
     V <- cbind(X, -1*G_x)
 
     Sk <- X - Xprev
-    Mk <- (G_x - X %*% t(G_x) %*% X) - (G_xprev - Xprev %*% t(G_xprev) %*% Xprev)
+    Mk <- (G_x - X %*% (t(G_x) %*% X)) - (G_xprev - Xprev %*% (t(G_xprev) %*% Xprev))
 
     tau <- tr(t(Sk) %*% Sk) / abs(tr(t(Sk) %*%  Mk))
     
@@ -292,13 +289,14 @@ lineSearchBB <- function(F, X, Xprev, G_x, G_xprev, rho, C, maxIters=20) {
 
     HV <- solve(diag(2*p) + tau/2 * t(V) %*% U) %*% t(V)
     Ytau <- X - tau * U %*% (HV %*% X)
-    FprimeY0 <- sum(diag(t(G_x) %*% -A %*% X))
+
+    tGX <- t(G_x) %*% X
+    FprimeY0 <- -sum(diag((t(G_x) %*% G_x) %*% (t(X) %*% X) - tGX %*% tGX))    
 
     iter <- 1
-
+    
     while(F(Ytau) > C + rho*tau*FprimeY0) {
-        
-        tau <- tau/2
+            tau <- tau/2
 
         if(iter > maxIters) {
             print("Reached maximum iterations in line search.")
@@ -306,9 +304,7 @@ lineSearchBB <- function(F, X, Xprev, G_x, G_xprev, rho, C, maxIters=20) {
         }
 
         HV <- solve(diag(2*p) + tau/2 * t(V) %*% U) %*% t(V)
-
         Ytau <- X - tau * U %*% (HV %*% X)
-        FprimeY0 <- sum(diag(t(G_x) %*% -A %*% X))
 
         iter <- iter + 1
 
